@@ -1,123 +1,84 @@
-<link rel="stylesheet" href="{{ 'component-badge.css' | asset_url }}" media="print" onload="this.media='all'">
-<link rel="stylesheet" href="{{ 'component-card.css' | asset_url }}" media="print" onload="this.media='all'">
-<link rel="stylesheet" href="{{ 'component-price.css' | asset_url }}" media="print" onload="this.media='all'">
-<link rel="stylesheet" href="{{ 'component-product-grid.css' | asset_url }}" media="print" onload="this.media='all'">
-<link rel="stylesheet" href="{{ 'section-product-recommendations.css' | asset_url }}" media="print" onload="this.media='all'">
+{% assign number_of_related_products = section.settings.number_of_related_products | times:1 %}
 
-<noscript>{{ 'component-badge.css' | asset_url | stylesheet_tag }}</noscript>
-<noscript>{{ 'component-card.css' | asset_url | stylesheet_tag }}</noscript>
-<noscript>{{ 'component-price.css' | asset_url | stylesheet_tag }}</noscript>
-<noscript>{{ 'component-product-grid.css' | asset_url | stylesheet_tag }}</noscript>
-<noscript>{{ 'section-product-recommendations.css' | asset_url | stylesheet_tag }}</noscript>
+{% if section.settings.related_product_row == '4' %}
+    {%- assign class = 'four-items' -%}
+    {%- assign rows = '4' -%}
+    {%- assign grid_item_width = 'col-6 col-md-4 col-lg-3' -%}
+{% else %}
+    {%- assign class = 'five-items' -%}
+    {%- assign rows = '5' -%}
+    {%- assign grid_item_width = 'col-6 col-md-4 col-lg-3 col5' -%}
+{% endif%}
 
-<product-recommendations class="product-recommendations page-width" data-url="{{ routes.product_recommendations_url }}?section_id={{ section.id }}&product_id={{ product.id }}&limit=4">
-  {% if recommendations.performed and recommendations.products_count > 0 %}
-    <h2 class="product-recommendations__heading">{{ section.settings.heading | escape }}</h2>
-    <ul class="grid grid--2-col product-grid{% if recommendations.products_count > 3 %} grid--4-col-desktop grid--quarter-max{% else %} grid--{{ recommendations.products_count }}-col-tablet{% endif %}" role="list">
-      {% for recommendation in recommendations.products %}
-        <li class="grid__item">
-          {% render 'product-card',
-            product_card_product: recommendation,
-            media_size: section.settings.image_ratio,
-            show_secondary_image: section.settings.show_secondary_image,
-            add_image_padding: section.settings.add_image_padding,
-            show_vendor: section.settings.show_vendor
-          %}
-        </li>
-      {% endfor %}
-    </ul>
-  {% endif %}
-</product-recommendations>
-
-{% javascript %}
-  class ProductRecommendations extends HTMLElement {
-    constructor() {
-      super();
-
-      const handleIntersection = (entries, observer) => {
-        if (!entries[0].isIntersecting) return;
-        observer.unobserve(this);
-
-        fetch(this.dataset.url)
-          .then(response => response.text())
-          .then(text => {
-            const html = document.createElement('div');
-            html.innerHTML = text;
-            const recommendations = html.querySelector('product-recommendations');
-            if (recommendations && recommendations.innerHTML.trim().length) {
-              this.innerHTML = recommendations.innerHTML;
-            }
-          })
-          .catch(e => {
-            console.error(e);
-          });
-      }
-
-      new IntersectionObserver(handleIntersection.bind(this), {rootMargin: '0px 0px 200px 0px'}).observe(this);
-    }
-  }
-
-  customElements.define('product-recommendations', ProductRecommendations);
-{% endjavascript %}
-
+{% if section.settings.display_related_products %}
+<div id="product-recommendations">
+  <div class="container">
+    <div class="related-products page-width product-recommendations js-product-recomendation" data-product-id="{{ product.id }}" data-limit="{{ number_of_related_products }}" data-section-id="{{ section.id }}" data-section-type="product-recommendations" data-related-products>
+      {% if recommendations.products_count > 0 %}
+      {% if section.settings.related_products_title %}
+      <div class="widget-title not-before">   
+        <h3 class="box-title">
+          <span class="title"> 
+            {% render 'multilang' with section.settings.related_products_title %}
+          </span>
+        </h3>    
+      </div>
+      {% endif %}
+      <div class="widget-product">
+        <div class="products-grid grid grid--uniform grid--view-items row {{ class }}" data-row="{{ rows }}">
+          {% for product in recommendations.products %}
+          <div class="grid__item small--one-half medium-up--one-quarter grid-item {{ grid_item_width }}{% if settings.product_image_border %} grid-item-border{% endif %}">
+            {% render 'product-grid-item' with product as product %}
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endif %}
 {% schema %}
-{
-  "name": "t:sections.product-recommendations.name",
-  "tag": "section",
-  "class": "spaced-section",
-  "settings": [
-    {
-      "type": "paragraph",
-      "content": "t:sections.product-recommendations.settings.paragraph__1.content"
-    },
-    {
-      "type": "text",
-      "id": "heading",
-      "default": "You may also like",
-      "label": "t:sections.product-recommendations.settings.heading.label"
-    },
-    {
-      "type": "header",
-      "content": "t:sections.product-recommendations.settings.header__2.content"
-    },
-    {
-      "type": "select",
-      "id": "image_ratio",
-      "options": [
+  {
+    "name": "Products Recomendation",
+    "settings": [
         {
-          "value": "adapt",
-          "label": "t:sections.product-recommendations.settings.image_ratio.options__1.label"
+            "type": "checkbox",
+            "id": "display_related_products",
+            "label": "Display Related Products?",
+            "default": true
         },
         {
-          "value": "portrait",
-          "label": "t:sections.product-recommendations.settings.image_ratio.options__2.label"
+            "type": "text",
+            "id": "related_products_title",
+            "label": "Title of related products block",
+            "default": "Related Products"
         },
         {
-          "value": "square",
-          "label": "t:sections.product-recommendations.settings.image_ratio.options__3.label"
+            "type": "select",
+            "id": "related_product_row",
+            "label": "Related per row:",
+            "options": [
+                {
+                    "value": "4",
+                    "label": "4"
+                },
+                {
+                    "value": "5",
+                    "label": "5"
+                }
+            ],
+            "default": "4"
+        },
+        {
+          "type":      "range",
+          "id":        "number_of_related_products",
+          "min":       2,
+          "max":       50,
+          "step":      1,
+          "label":     "Number of related products",
+          "default":   10
         }
-      ],
-      "default": "adapt",
-      "label": "t:sections.product-recommendations.settings.image_ratio.label"
-    },
-    {
-      "type": "checkbox",
-      "id": "show_secondary_image",
-      "default": false,
-      "label": "t:sections.product-recommendations.settings.show_secondary_image.label"
-    },
-    {
-      "type": "checkbox",
-      "id": "add_image_padding",
-      "default": false,
-      "label": "t:sections.product-recommendations.settings.add_image_padding.label"
-    },
-    {
-      "type": "checkbox",
-      "id": "show_vendor",
-      "default": false,
-      "label": "t:sections.product-recommendations.settings.show_vendor.label"
-    }
   ]
-}
+  }
 {% endschema %}
