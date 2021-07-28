@@ -51,16 +51,30 @@
             {% if item.product.variants.size != 0 %}
             {% unless item.variant.title contains 'Default' %}
             <small>{{ item.variant.title }}</small>
-            <label>1st_Text:</label>{{item.properties.first_Text}}
             {% endunless %}
             {% endif %}
           </div>
           
-          <div class="properties">
-            <label>1st_Text:</label>{{item.properties.first_Text}}
-            <br />
-            <label>Font:</label>{{item.properties.Font}}
+          <!-- 定制设计平台插入代码，请勿删除 Start -->
+          <div class="properties option">
+            {% if item.properties.first_Text %}
+              <label>Text: </label><small> {{ item.properties.first_Text }}</small>
+            {% endif %}
+            {% if item.properties.second_Text %}
+              <small>/ {{ item.properties.second_Text }}</small>
+            {% endif %}
+            {% if item.properties.third_Text %}
+              <small>/ {{ item.properties.third_Text }}</small>
+            {% endif %}
+            {% if item.properties.forth_Text %}
+              <small>/ {{ item.properties.forth_Text }}</small>
+            {% endif %}
+            {% if item.properties.Font %}
+              <br/><label>Font: </label> {{item.properties.Font}}
+            {% endif %}
+              <br/><label>Number: </label> {{item.properties.Number}}
           </div>
+          <!-- 定制设计平台插入代码，请勿删除 End -->
 
           <div class="cart-collateral">
             <span class="qtt">

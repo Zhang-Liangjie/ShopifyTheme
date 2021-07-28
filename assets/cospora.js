@@ -963,7 +963,39 @@
         },
 
         doUpdateDropdownCart: function (cart) {
-            var template = '<li class="item" id="cart-item-{ID}"><a href="{URL}" title="{TITLE}" class="product-image"><img src="{IMAGE}" alt="{TITLE}"></a><div class="product-details"><a href="javascript:void(0)" title="Remove This Item" class="btn-remove"><svg aria-hidden="true" data-prefix="fal" data-icon="times" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512" class="svg-inline--fa fa-times fa-w-10 fa-2x"><path fill="currentColor" d="M193.94 256L296.5 153.44l21.15-21.15c3.12-3.12 3.12-8.19 0-11.31l-22.63-22.63c-3.12-3.12-8.19-3.12-11.31 0L160 222.06 36.29 98.34c-3.12-3.12-8.19-3.12-11.31 0L2.34 120.97c-3.12 3.12-3.12 8.19 0 11.31L126.06 256 2.34 379.71c-3.12 3.12-3.12 8.19 0 11.31l22.63 22.63c3.12 3.12 8.19 3.12 11.31 0L160 289.94 262.56 392.5l21.15 21.15c3.12 3.12 8.19 3.12 11.31 0l22.63-22.63c3.12-3.12 3.12-8.19 0-11.31L193.94 256z" class=""></path></svg></a><a class="product-name" href="{URL}">{TITLE}</a><div class="option"><small>{VARIANT}</small></div><div class="cart-collateral"><span class="qtt">{QUANTITY} X </span><span class="price">{PRICE}</span></div></div></li>';
+
+            // <!-- 定制设计平台插入代码，请勿删除 -->
+            var template = `
+            <li class="item" id="cart-item-{ID}">
+                <a href="{URL}" title="{TITLE}" class="product-image">
+                    <img src="{IMAGE}" alt="{TITLE}">
+                </a>
+                <div class="product-details">
+                    <a href="javascript:void(0)" title="Remove This Item" class="btn-remove">
+                        <svg aria-hidden="true" data-prefix="fal" data-icon="times" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512" class="svg-inline--fa fa-times fa-w-10 fa-2x">
+                            <path fill="currentColor" d="M193.94 256L296.5 153.44l21.15-21.15c3.12-3.12 3.12-8.19 0-11.31l-22.63-22.63c-3.12-3.12-8.19-3.12-11.31 0L160 222.06 36.29 98.34c-3.12-3.12-8.19-3.12-11.31 0L2.34 120.97c-3.12 3.12-3.12 8.19 0 11.31L126.06 256 2.34 379.71c-3.12 3.12-3.12 8.19 0 11.31l22.63 22.63c3.12 3.12 8.19 3.12 11.31 0L160 289.94 262.56 392.5l21.15 21.15c3.12 3.12 8.19 3.12 11.31 0l22.63-22.63c3.12-3.12 3.12-8.19 0-11.31L193.94 256z" class=""></path>
+                        </svg>
+                    </a>
+                    <a class="product-name" href="{URL}">{TITLE}</a>
+                    <div class="option">
+                        <small>{VARIANT}</small>
+                    </div>
+
+                    <!-- 定制设计平台插入代码，请勿删除 Start -->
+                    <div class="properties option">
+                        <label>Text: </label><small> {TEXT} </small>
+                        <br/><label>Font: </label> {FONT}
+                        <br/><label>Number: </label> {NUMBER}
+                    </div>
+                    <!-- 定制设计平台插入代码，请勿删除 End -->
+
+                    <div class="cart-collateral">
+                        <span class="qtt">{QUANTITY} X </span>
+                        <span class="price">{PRICE}</span>
+                    </div>
+                </div>
+            </li>`;
+            // <!-- 定制设计平台插入代码，请勿删除 -->
 
             $('[data-cart-count]').text(cart.item_count);
 
@@ -979,6 +1011,17 @@
                     item = item.replace(/\{URL\}/g, cart.items[i].url);
                     item = item.replace(/\{TITLE\}/g, cospora.translateText(cart.items[i].product_title));
                     item = item.replace(/\{VARIANT\}/g, cart.items[i].variant_title || '');
+
+                    // <!-- 定制设计平台插入代码，请勿删除 Start -->
+                    item = item.replace(/\{FONT\}/g, cart.items[i].properties.Font);
+                    item = item.replace(/\{NUMBER\}/g, cart.items[i].properties.Number);
+                    item = item.replace(/\{TEXT\}/g, cart.items[i].properties.first_Text ? cart.items[i].properties.first_Text : '' + 
+                                                    cart.items[i].properties.second_Text ? cart.items[i].properties.second_Text : '' + 
+                                                    cart.items[i].properties.third_Text ? cart.items[i].properties.third_Text : '' + 
+                                                    cart.items[i].properties.forth_Text ? cart.items[i].properties.forth_Text : ''
+                                                        );
+                    // <!-- 定制设计平台插入代码，请勿删除 End -->
+
                     item = item.replace(/\{QUANTITY\}/g, cart.items[i].quantity);
                     item = item.replace(/\{IMAGE\}/g, Shopify.resizeImage(cart.items[i].image, '160x'));
                     if (cart.cart_level_discount_applications.length > 0) {
@@ -2781,11 +2824,22 @@
                             var image = productItem.find('.product-grid-image img').attr('data-srcset');
                             var variant = thisForm.find('#product-selectors option:selected, #product-select-qv option:selected').text().trim();
 
+                            // <!-- 定制设计平台插入代码，请勿删除 -->
+                            var font = productItem.find('.font-select')[0].value;
+                            var number = productItem.find('.number-select')[0].value;
+                            var textItems = productItem.find('#inputItem')[0].children;
+                            var first_Text = textItems[0].value;
+                            var second_Text = textItems[1] ? ' / '+ textItems[1].value : '';
+                            var third_Text = textItems[2] ? ' / '+ textItems[2].value : '';
+                            var forth_Text = textItems[3] ? ' / '+ textItems[3].value : '';
+                            var texts = first_Text + second_Text + third_Text + forth_Text;
+                            // <!-- 定制设计平台插入代码，请勿删除 -->
+
                             if(!image) {
                                 image = productItem.siblings('.product-photos').find('.slick-current img[id|="product-featured-image"]').attr('src') || productItem.siblings('.product-photos').find('.slick-current img[id|="qv-product-featured-image"]').attr('src');
                             }
 
-                            cospora.doAjaxAddToCartNormal(data, title, image, variant);
+                            cospora.doAjaxAddToCartNormal(data, title, image, variant, font, number, texts);
                             break;
 
                     };
@@ -2795,7 +2849,7 @@
             });
         },
 
-        doAjaxAddToCartNormal: function(data, title, image, variant, dataBundle) {
+        doAjaxAddToCartNormal: function(data, title, image, variant, font, number, texts, dataBundle) {
             $.ajax({
                 type: "POST",
                 url: "/cart/add.js",
@@ -2815,6 +2869,13 @@
                     if(variant != 'Default Title'){
                         modalContent.find('.size_option').html(variant);
                     }
+
+                    // <!-- 定制设计平台插入代码，请勿删除 -->
+                    modalContent.find('.font_option').html(font);
+                    modalContent.find('.number_option').html(number);
+                    modalContent.find('.text_option').html(texts);
+                    // <!-- 定制设计平台插入代码，请勿删除 -->
+
                     modalContent.find('.ajax-product-image').attr('src', image);
                     modalContent.find('.message-added-cart').show();
 

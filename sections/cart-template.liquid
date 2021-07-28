@@ -74,15 +74,27 @@
                 {% render 'multilang' with item.vendor %}
               </span>
 
-              <div class="properties">
-                {% unless item.properties.first_Text contains 'Default' %}
-                <label>1st_Text:</label>{{item.properties.first_Text}}
-                {% endunless %}<br/>
-                {% unless item.properties.Font contains 'Default' %}
-                <label>Font:</label>{{item.properties.Font}}
-                {% endunless %}
+              <!-- 定制设计平台插入代码，请勿删除 Start -->
+              <div class="properties size">
+                {% if item.properties.first_Text %}
+                  <label>Text: </label><small> {{ item.properties.first_Text }}</small>
+                {% endif %}
+                {% if item.properties.second_Text %}
+                  <small>/ {{ item.properties.second_Text }}</small>
+                {% endif %}
+                {% if item.properties.third_Text %}
+                  <small>/ {{ item.properties.third_Text }}</small>
+                {% endif %}
+                {% if item.properties.forth_Text %}
+                  <small>/ {{ item.properties.forth_Text }}</small>
+                {% endif %}
+                {% if item.properties.Font %}
+                  <br/><label>Font: </label> {{item.properties.Font}}
+                {% endif %}
+                  <br/><label>Number: </label> {{item.properties.Number}}
               </div>
-              
+              <!-- 定制设计平台插入代码，请勿删除 End -->
+
               <p class="price" data-price="{{ item.price }}">
                 {{ item.line_price | money }}
               </p>

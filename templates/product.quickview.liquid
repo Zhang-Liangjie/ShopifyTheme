@@ -408,7 +408,7 @@
                           <div class="top">
                             <lable class="top-text">Text<em>*</em></lable>
                             <div id="inputItem">
-                            	<input class="top-input 1" placeholder="1st inscription (Up to 8 characters)" value="" id="text" type="text" name="properties[first_Text]">
+                            	<input class="top-input 1" placeholder="first inscription (Up to 8 characters)" value="" id="text" type="text" name="properties[first_Text]">
                             </div>
                           </div>
                           <div class="center">
@@ -783,7 +783,7 @@
     });    
 </script>
 
-
+<!-- 定制设计平台插入代码，请勿删除 Start -->
 <script>
     var topInput = document.getElementsByClassName("top-input");
     var buttonClick = document.getElementsByClassName("add-button");
@@ -800,7 +800,7 @@
       } else if (status === 'none'){
         buttonClick[0].style.pointerEvents = "auto";
       }
-      fontSelect[0].value = font;
+      fontSelect[0].value = font || null;
       fontSelect[0].style.fontFamily = font;
       topInput[0].value = text || null;
     }
@@ -832,18 +832,18 @@
        var centerStatus = "block";
      var newDom = '';
      switch(value) {
-       case "1 inscription":numberArr = ["1st"];centerStatus = "block";
+      case "1 inscription":numberArr = ["first"];centerStatus = "block";
+          break;
+      case "2 inscription":numberArr = ["first", "second"];centerStatus = "block";
            break;
-       case "2 inscription":numberArr = ["1st", "2nd"];centerStatus = "block";
-            break;
-       case "3 inscription":numberArr = ["1st", "2nd", "3rd"];centerStatus = "block";
-            break;
-       case "4 inscription":numberArr = ["1st", "2nd", "3rd", "4th"];centerStatus = "block";
-            break;
-       case "1 inscription No fonts":numberArr = ["1st"];centerStatus = "none";
-            break;
-       default:numberArr = ["1st"];centerStatus = "block";
-      }
+      case "3 inscription":numberArr = ["first", "second", "third"];centerStatus = "block";
+           break;
+      case "4 inscription":numberArr = ["first", "second", "third", "forth"];centerStatus = "block";
+           break;
+      case "1 inscription No fonts":numberArr = ["first"];centerStatus = "none";
+           break;
+      default:numberArr = ["first"];centerStatus = "block";
+     }
        numberArr.map( (item, index) => {
            var dom = `<input class="top-input ${index+1}" style="margin-bottom: 10px" placeholder="${item} inscription (Up to 8 characters)" value="" id="text" type="text" name="properties[${item}_Text]">`
            newDom += dom;
@@ -957,3 +957,4 @@
       margin-top:20px;
     }
   </style>
+  <!-- 定制设计平台插入代码，请勿删除 End -->

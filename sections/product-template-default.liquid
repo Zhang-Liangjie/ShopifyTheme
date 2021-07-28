@@ -398,7 +398,6 @@
 				
                     <!-- 定制设计平台插入代码，请勿删除 Start -->
                       {%- if product.type == 'jewelry' -%}
-                        <div onclick="addButton()" class="add-button btn">Add Engravings</div>
                         <div class="popup">
                           <div class="number">
                             <lable class="number-text">Select number of inscriptions<em>*</em></lable>
@@ -413,7 +412,7 @@
                           <div class="top">
                             <lable class="top-text">Text<em>*</em></lable>
                             <div id="inputItem">
-                            	<input class="top-input 1" placeholder="1st inscription (Up to 8 characters)" value="" id="text" type="text" name="properties[first_Text]">
+                            	<input class="top-input 1" placeholder="first inscription (Up to 8 characters)" value="" id="text" type="text" name="properties[first_Text]">
                             </div>
                           </div>
                           <div class="center">
@@ -426,13 +425,10 @@
                               {% endfor %}
                             </select>
                           </div>
-                          <div class="bottom">
-                            <div class="confirm-button btn" onclick="Confirm()">Confirm</div>
-                            <div class="close-button btn btn--secondary-accent " onclick="closePopup()">Cancel</div>
-                          </div>
                         </div>
                       {%- endif -%}
                     <!-- 定制设计平台插入代码，请勿删除 End -->
+
                     {% else %}
                     <input type="hidden" name="id" value="{{ product.variants[0].id }}" />
                     {% endif %}
@@ -893,46 +889,10 @@
 {% endif %}
 
 {% endunless %}
-
+ <!-- 定制设计平台插入代码，请勿删除 Start -->
 <script>
-    var topInput = document.getElementsByClassName("top-input");
-    var buttonClick = document.getElementsByClassName("add-button");
     var fontSelect = document.getElementsByClassName("font-select");
-    var numberSelect = document.getElementsByClassName("number-select")
     var inputItem = document.getElementById("inputItem")
-    var centerBox = document.getElementsByClassName("center")
-    var text;
-    var font;
-    function init(status){
-      document.getElementsByClassName("popup")[0].style.display = status;
-      if(status === "block"){
-        buttonClick[0].style.pointerEvents = "none";
-      } else if (status === 'none'){
-        buttonClick[0].style.pointerEvents = "auto";
-      }
-      fontSelect[0].value = font;
-      fontSelect[0].style.fontFamily = font;
-      topInput[0].value = text || null;
-    }
-    function addButton(){
-      init('block');
-    }
-    function closePopup(){
-      init('none');
-    }
-    function Confirm(){
-      text = topInput[0].value;
-      font = fontSelect[0].value;
-      if(text.length > 13){
-        buttonClick[0].innerHTML="Add Engravings <br/>( " + text.substring(0,13) + "... )";
-      }else if(text.length > 0 && text.length <= 18){
-      	buttonClick[0].innerHTML="Add Engravings <br/>( " + text + " )";
-      }else{
-      	buttonClick[0].innerHTML="Add Engravings";
-        font = '';
-      }
-      init('none');
-    }
     fontSelect[0].style.fontFamily = fontSelect[0].value;
     function fontSelectChange(value){
       fontSelect[0].style.fontFamily = value;
@@ -942,17 +902,17 @@
         var centerStatus = "block";
       var newDom = '';
       switch(value) {
-        case "1 inscription":numberArr = ["1st"];centerStatus = "block";
+        case "1 inscription":numberArr = ["first"];centerStatus = "block";
             break;
-        case "2 inscription":numberArr = ["1st", "2nd"];centerStatus = "block";
+        case "2 inscription":numberArr = ["first", "second"];centerStatus = "block";
              break;
-        case "3 inscription":numberArr = ["1st", "2nd", "3rd"];centerStatus = "block";
+        case "3 inscription":numberArr = ["first", "second", "third"];centerStatus = "block";
              break;
-        case "4 inscription":numberArr = ["1st", "2nd", "3rd", "4th"];centerStatus = "block";
+        case "4 inscription":numberArr = ["first", "second", "third", "forth"];centerStatus = "block";
              break;
-        case "1 inscription No fonts":numberArr = ["1st"];centerStatus = "none";
+        case "1 inscription No fonts":numberArr = ["first"];centerStatus = "none";
              break;
-        default:numberArr = ["1st"];centerStatus = "block";
+        default:numberArr = ["first"];centerStatus = "block";
    		}
         numberArr.map( (item, index) => {
             var dom = `<input class="top-input ${index+1}" style="margin-bottom: 10px" placeholder="${item} inscription (Up to 8 characters)" value="" id="text" type="text" name="properties[${item}_Text]">`
@@ -963,21 +923,6 @@
     }
   </script>
   <style>
-    .add-button{
-      width:100%;
-      background:#e1e1e1;
-    }
-    .add-button:hover{
-      background:#c4c4c4;
-    }
-    .popup{
-      border: 1px solid #e1e1e1;
-      border-radius: 2px;
-      display:none;    
-      padding-bottom: 10px;
-      padding:10px;
-      margin-bottom:25px;
-    }
     .number{
       margin-bottom:25px;
     }
@@ -1040,35 +985,8 @@
       max-width:380px;
       padding:2px 6px 2px 6px;
     }
-    .bottom{
-      display:flex;
-      margin-top:25px;
-      flex-direction: column;
-    }
-    .confirm-button{;
-      margin-bottom:10px;
-      min-height:0px;
-      padding:6px 30px;
-      background:#1b100e;
-      color:#fff;
-    }
-    .confirm-button:hover{
-      background:#484140;
-    }
-    .close-button{
-      min-height:0px;
-      padding:6px 30px;
-      border: 1px solid #000;
-    }
-    .close-button:hover{
-      background:#e3e3e3;
-      border: 1px solid #e3e3e3;
-    }
-    .product__price{
-      margin-top:20px;
-    }
   </style>
-
+<!-- 定制设计平台插入代码，请勿删除 End -->
 
 {% schema %}
 {

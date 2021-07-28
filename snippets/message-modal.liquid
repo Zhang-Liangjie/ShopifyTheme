@@ -172,6 +172,13 @@
                 <div class="ajax-right">
                   <div class="ajax-product-title"></div>
                   <p class="size_option"></p>
+
+                  <!-- 定制设计平台插入代码，请勿删除 Start -->
+                  <label>Text:</label><span class="text_option">Text:</span><br />
+                  <label>Font:</label> <span class="font_option"></span><br />
+                  <label>Number:</label> <span class="number_option"></span>
+                  <!-- 定制设计平台插入代码，请勿删除 End -->
+
                   <p class="success-message message-added-cart" {% if settings.enable_multilang %}data-translate="cart.ajax_cart.success_text"{% endif %}>
                     {{ 'cart.ajax_cart.success_text' | t }}
                   </p>
